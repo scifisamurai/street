@@ -3,6 +3,11 @@
 require "test_helper"
 
 class ProductTest < ActiveSupport::TestCase
+  # If we only need the product fixures we can specify
+  # he following line. Otherwise, rails will load all fixtures.
+  #
+  #fixtures :products
+
   test "product attributes must not be empty" do
     product = Product.new
     assert product.invalid?
@@ -79,5 +84,38 @@ class ProductTest < ActiveSupport::TestCase
       content_type: "image/svg+xml"
     )
     assert_not product.valid?, "image/svg+xml must be invalid"
+  end
+
+  test "product is not valid without a unique title" do
+    product = Product.new(
+      title: products(:pragprog).title,
+      description: "yyy",
+      price: 1
+    )
+    product.image.attach(
+      io: File.open("test/fixtures/files/lorem.jpg"),
+      filename: "lorem.jpg",
+      content_type: "image/jpeg"
+    )
+    assert product.invalid?
+    assert_equal [ "has already been taken" ], product.errors[:title]
+  end
+
+  test "product is not valid without a unique title - i18n" do
+    product = Product.new(
+      title: products(:pragprog).title,
+      description: "yyy",
+      price: 1
+    )
+    product.image.attach(
+      io: File.open("test/fixtures/files/lorem.jpg"),
+      filename: "lorem.jpg",
+      content_type: "image/jpeg"
+    )
+    assert product.invalid?
+    assert_equal(
+      [ I18n.translate("errors.messages.taken") ],
+      product.errors[:title]
+    )
   end
 end

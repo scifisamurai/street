@@ -40,4 +40,44 @@ class ProductTest < ActiveSupport::TestCase
     product.price = 1
     assert product.valid?
   end
+
+  ## This is in the book; not sure why ... might be used later?
+  #def new_product(image_url)
+  #  product = Product.new(
+  #    title: "My Book Title",
+  #    description: "yyy",
+  #    price: 1
+  #  )
+  #  product.image.attach(
+  #    io: File.open("test/fixtures/files/lorem.jpg"),
+  #    filename: "lorem.jpg",
+  #    content_type: "image/jpeg"
+  #  )
+  #end
+
+  test "image url" do
+    product = Product.new(
+      title: "My Book Title",
+      description: "yyy",
+      price: 1
+    )
+    product.image.attach(
+      io: File.open("test/fixtures/files/lorem.jpg"),
+      filename: "lorem.jpg",
+      content_type: "image/jpeg"
+    )
+    assert product.valid?, "image/jpeg must be valid"
+
+    product = Product.new(
+      title: "My Book Title",
+      description: "yyy",
+      price: 1
+    )
+    product.image.attach(
+      io: File.open("test/fixtures/files/logo.svg"),
+      filename: "lorem.jpg",
+      content_type: "image/svg+xml"
+    )
+    assert_not product.valid?, "image/svg+xml must be invalid"
+  end
 end

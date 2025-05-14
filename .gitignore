@@ -7,6 +7,12 @@
 # Ignore bundler config.
 /.bundle
 
+# Ignore routes file
+routes.txt
+
+# Ignore org mode todos
+todo.org
+
 # Ignore all environment files.
 /.env*
 

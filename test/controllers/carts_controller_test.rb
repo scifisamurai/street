@@ -2,7 +2,10 @@ require "test_helper"
 
 class CartsControllerTest < ActionDispatch::IntegrationTest
   setup do
-    @cart = carts(:one)
+    # We need to post like this to ensure
+    # we populate session with cart_id.
+    post line_items_url, params: { product_id: products(:two).id }
+    @cart = Cart.find(session[:cart_id])
   end
 
   test "should get index" do

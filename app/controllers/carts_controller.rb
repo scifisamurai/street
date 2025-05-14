@@ -1,5 +1,6 @@
 class CartsController < ApplicationController
   before_action :set_cart, only: %i[ show edit update destroy ]
+  rescue_from ActiveRecord::RecordNotFound, with: :invalid_cart
 
   # GET /carts or /carts.json
   def index
@@ -66,5 +67,14 @@ class CartsController < ApplicationController
     # Only allow a list of trusted parameters through.
     def cart_params
       params.fetch(:cart, {})
+    end
+
+    def invalid_cart
+      logger.error "Attempt to access invalid cart #{params[:id]}"
+      # notice specifies the message to be stored in flash as a notice
+      # We redirect to prevent
+      # 1. exposing parts of the app.
+      # 2. retriggering the error via clicking the Reload button.
+      redirect_to store_index_url, notice: "Invalid cart"
     end
 end

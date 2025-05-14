@@ -26,6 +26,24 @@ class LineItemsControllerTest < ActionDispatch::IntegrationTest
     assert_select "td", "The Pragmatic Programmer"
   end
 
+  test 'should add one line item per unique products in a cart' do
+    # initially our session doesn't exist
+    p1_id = products(:one).id
+    p2_id = products(:two).id
+    2.times do
+      post line_items_url, params: { product_id: p1_id }
+    end
+    post line_items_url, params: { product_id: p2_id }
+
+    items = LineItem.where(cart_id: session[:cart_id], product_id: p1_id)
+    assert_equal(items.count, 1)
+    assert_equal(items.first.quantity, 2)
+
+    items = LineItem.where(cart_id: session[:cart_id], product_id: p2_id)
+    assert_equal(items.count, 1)
+    assert_equal(items.first.quantity, 1)
+  end
+
   test "should show line_item" do
     get line_item_url(@line_item)
     assert_response :success

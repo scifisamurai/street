@@ -22,6 +22,7 @@ class LineItemsController < ApplicationController
   end
 
   # POST /line_items or /line_items.json
+  # Called via the Store#index view
   def create
     product = Product.find(params[:product_id])
     @line_item = @cart.add_product(product)

@@ -1,0 +1,17 @@
+/* @keyframes defines an animation (in this case called: line-item-highlight) */
+@keyframes line-item-highlight {
+  0% {
+    /* make the background bright green */
+    background: #8f8;
+  }
+
+  100% {
+    background: none;
+  }
+}
+
+/* same name as our animation but it doesn't have to use that name */
+.line-item-highlight {
+  animation: line-item-highlight 1s;
+}
+

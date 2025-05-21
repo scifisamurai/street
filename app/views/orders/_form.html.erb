@@ -1,7 +1,9 @@
 <%= form_with(model: order, class: "contents") do |form| %>
   <% if order.errors.any? %>
-    <div id="error_explanation" class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-md mt-3">
-      <h2><%= pluralize(order.errors.count, "error") %> prohibited this order from being saved:</h2>
+    <div id="error_explanation" class="bg-red-50 text-red-500 px-3 py-2
+      font-medium rounded-md mt-3">
+      <h2><%= pluralize(order.errors.count, "error") %>
+      prohibited this order from being saved:</h2>
 
       <ul class="list-disc ml-6">
         <% order.errors.each do |error| %>
@@ -23,18 +25,32 @@
 
   <div class="my-5">
     <%= form.label :email %>
-    <%= form.text_field :email, class: "input-field" %>
+    <%= form.email_field :email, class: "input-field" %>
   </div>
 
-  <div class="my-5">
-    <%= form.label :pay_type %>
-    <%= form.select :pay_type,
-                    Order.pay_types.keys,
-                    { prompt: 'Select a payment method' },
-                    class: "input-field" %>
+  <%# We're using a data-controller of payment so that we know
+      that the elements the div contains will be controlled by
+      our payment stimulus controller. %>
+  <div data-controller="payment">
+    <div class="my-5">
+      <%= form.label :pay_type %>
+
+      <%# The data-action here runs when the pay_type changes %>
+      <%= form.select :pay_type, Order.pay_types.keys,
+                      { prompt: 'Select a payment method' },
+                      'data-payment-target' => 'selection',
+                      'data-action' => 'payment#showAdditionalFields',
+                      class: "input-field" %>
+    </div>
+
+    <%= render partial: 'check', locals: {form: form} %>
+    <%= render partial: 'cc', locals: {form: form} %>
+    <%= render partial: 'po', locals: {form: form} %>
   </div>
 
   <div class="inline">
-    <%= form.submit 'Place Order', class: "w-full sm:w-auto rounded-md px-3.5 py-2.5 bg-green-200 hover:bg-blue-500 text-block inline-block font-medium cursor-pointer" %>
+    <%= form.submit 'Place Order',  class: "w-full sm:w-autorounded-md
+        px-3.5 py-2.5 bg-green-200 hover:bg-blue-500 text-black
+        inline-block font-medium cursor-pointer" %>
   </div>
 <% end %>

@@ -4,6 +4,7 @@ class CartsControllerTest < ActionDispatch::IntegrationTest
   setup do
     # We need to post like this to ensure
     # we populate session with cart_id.
+    login_as users(:one)
     post line_items_url, params: { product_id: products(:two).id }
     @cart = Cart.find(session[:cart_id])
   end

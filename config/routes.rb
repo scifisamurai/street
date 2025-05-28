@@ -10,7 +10,23 @@ Rails.application.routes.draw do
     resources :line_items
     resources :carts
     #get "store/index"
-    root "store#index", as: "store_index"
+
+    # David NOTE: This just lets you use a GET route
+    #root "store#index", as: "store_index"
+
+    # David NOTE
+    # Since we're specifying `via: :all` we can use any HTTP VERB
+    # (GET, POST, etc ...) see:
+    # https://guides.rubyonrails.org/routing.html#http-verb-constraints
+    #
+    # The above warns you about doing this so probably not a good
+    # idea to do this in a real app unless we really need/want it
+    # and the higher ups agree to it.
+    #
+    # That being said since this is just a read operation and we're
+    # not doing any writes or anything destructive shhould be OK
+    # even if this was a real world scenario I think.
+    root "store#index", as: "store_index", via: :all
   end
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html

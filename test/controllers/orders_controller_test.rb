@@ -1,3 +1,11 @@
+#---
+# Excerpted from "Agile Web Development with Rails 8",
+# published by The Pragmatic Bookshelf.
+# Copyrights apply to this code. It may not be used to create training material,
+# courses, books, articles, and the like. Contact us if you are in doubt.
+# We make no guarantees that this code is fit for any purpose.
+# Visit https://pragprog.com/titles/rails8 for more book information.
+#---
 require "test_helper"
 
 class OrdersControllerTest < ActionDispatch::IntegrationTest
@@ -13,7 +21,7 @@ class OrdersControllerTest < ActionDispatch::IntegrationTest
 
   test "requires item in cart" do
     get new_order_url
-    assert_redirected_to  store_index_path
+    assert_redirected_to store_index_path
     assert_equal "Your cart is empty", flash[:notice]
   end
 
@@ -26,10 +34,12 @@ class OrdersControllerTest < ActionDispatch::IntegrationTest
 
   test "should create order" do
     assert_difference("Order.count") do
-      post orders_url, params: { order: { address: @order.address, email: @order.email, name: @order.name, pay_type: @order.pay_type } }
+      post orders_url, params: { order: { address: @order.address,
+        email: @order.email, name: @order.name,
+        pay_type: @order.pay_type } }
     end
 
-    assert_redirected_to store_index_url
+    assert_redirected_to store_index_url(locale: "en")
   end
 
   test "should show order" do

@@ -8,7 +8,7 @@ class SupportRequestsController < ApplicationController
     support_request.update(
       response: params.require(:support_request)[:response]
     )
-    #SupportRequestMailer.respond(support_request).deliver_now
+    SupportRequestMailer.respond(support_request).deliver_now
     redirect_to support_requests_path
   end
 end
